@@ -5,15 +5,7 @@ import { bills } from "../fixtures/bills.js"
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
     test("Then bill icon in vertical layout should be highlighted", () => {
-      const html = BillsUI(
-        { 
-          data: [
-
-          ],
-          loading: true,
-        }
-      )
-      document.body.innerHTML = html
+      document.body.innerHTML = BillsUI({ data: [] })
       //to-do write expect expression
     })
     test("Then bills should be ordered from earliest to latest", () => {
@@ -25,4 +17,16 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
   })
+  describe("When I am on Bills page but it is loading", () => {
+    test("Then, Loading page should be displayed", () => {
+      document.body.innerHTML = BillsUI({ loading: true });
+      expect(screen.getByText("Loading...")).toBeTruthy();
+    });
+  });
+  describe("When I am on Bills page but their is error", () => {
+    test("Then, Error page should be displayed", () => {
+      document.body.innerHTML = BillsUI({ error: true });
+      expect(screen.getByText("Erreur")).toBeTruthy();
+    });
+  });
 })
