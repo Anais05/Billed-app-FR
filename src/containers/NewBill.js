@@ -17,12 +17,12 @@ export default class NewBill {
   }
   handleChangeFile = e => {
     e.preventDefault();
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    const inputFile = document.querySelector(`input[data-testid="file"]`);
+    const file = inputFile.files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const extensions = /.(jpg|jpeg|png)$/i;
-    const errorMessage = this.document.getElementById("extension-error-message");
-    console.log(fileName)
+    const errorMessage = document.getElementById("extension-error-message");
 
     if (fileName.match(extensions)) {
       errorMessage.style.display = "none";
@@ -36,6 +36,7 @@ export default class NewBill {
         })
     } else {
       errorMessage.style.display = "block";
+      inputFile.value = "";
       this.fileUrl = "";
       this.fileName = "";
     }
