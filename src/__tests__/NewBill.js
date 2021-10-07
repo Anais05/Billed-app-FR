@@ -1,8 +1,11 @@
 import { screen, fireEvent } from "@testing-library/dom"
 import NewBillUI from "../views/NewBillUI.js"
+import BillsUI from "../views/BillsUI.js";
 import NewBill from "../containers/NewBill.js"
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import { ROUTES } from "../constants/routes";
+
+import firebase from "../__mocks__/firebase.js";
 
 Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
@@ -106,6 +109,48 @@ describe("Given I am connected as an employee", () => {
       fireEvent.submit(form);
 
       expect(handleSubmit).toHaveBeenCalled();
+    });
+  });
+  describe("When I post a bill", () => {
+    test("Add bill to mock API POST", async () => {
+      const postSpy = jest.spyOn(firebase, "post");
+      const newBill = {
+        id: "ECmaZAG4jkmdfECmaZAG",
+        vat: "50",
+        amount: 250,
+        name: "note",
+        fileName: "bills.jpg",
+        commentary: "note de frais",
+        pct: 20,
+        type: "IT et électronique",
+        email: "email@mail",
+        fileUrl: "https://mybills.com",
+        date: "2021-03-10",
+        status: "pending",
+        commentAdmin: "wait",
+      };
+      const allBills = await firebase.post(newBill);
+
+      expect(postSpy).toHaveBeenCalledTimes(1);
+      expect(allBills.data.length).toBe(5);
+    });
+    test("fetches bills from an API and fails with 404 message error", async () => {
+      firebase.post.mockImplementationOnce(() =>
+        Promise.reject(new Error("Erreur 404"))
+      );
+      document.body.innerHTML = BillsUI({ error: "Erreur 404" });;
+      const message = await screen.getByText(/Erreur 404/);
+
+      expect(message).toBeTruthy();
+    });
+    test("fetches messages from an API and fails with 500 message error", async () => {
+      firebase.post.mockImplementationOnce(() =>
+        Promise.reject(new Error("Erreur 500"))
+      );
+      document.body.innerHTML = BillsUI({ error: "Erreur 500" });
+      const message = await screen.getByText(/Erreur 500/);
+
+      expect(message).toBeTruthy();
     });
   });
 })
