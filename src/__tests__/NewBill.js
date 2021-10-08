@@ -4,7 +4,6 @@ import BillsUI from "../views/BillsUI.js";
 import NewBill from "../containers/NewBill.js"
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import { ROUTES } from "../constants/routes";
-
 import firebase from "../__mocks__/firebase.js";
 
 Object.defineProperty(window, "localStorage", {
@@ -27,6 +26,7 @@ describe("Given I am connected as an employee", () => {
     test("Then the form should be displayed", () => {
       document.body.innerHTML = NewBillUI();
       const form = screen.getByTestId('form-new-bill');
+
       expect(form).toBeTruthy();
     });
   });
@@ -51,6 +51,7 @@ describe("Given I am connected as an employee", () => {
           files: [new File(["test"], "test.pdf", { type: "PDF/pdf" })],
         },
       });
+
       expect(handleChangeFile).toHaveBeenCalled();
       expect(document.getElementById("extension-error-message").style.display).toBe("block");
     });
@@ -86,9 +87,10 @@ describe("Given I am connected as an employee", () => {
           files: [new File(["test"], "test.png", { type: "image/png" })],
         },
       });
+
       expect(handleChangeFile).toHaveBeenCalled();
       expect(file.files[0].name).toBe("test.png");
-      // expect(document.getElementById("extension-error-message").style.display).toBe("none");
+      expect(document.getElementById("extension-error-message").style.display).toBe("none");
     });
   });
   describe("When I'm on NewBill page and click on submit btn", () => {
