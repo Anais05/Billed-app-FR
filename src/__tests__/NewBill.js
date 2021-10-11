@@ -113,8 +113,12 @@ describe("Given I am connected as an employee", () => {
       expect(handleSubmit).toHaveBeenCalled();
     });
   });
+});
+
+//TEST D'INTEGRATION POST
+describe('Given I am connected as an employee', () => {
   describe("When I post a bill", () => {
-    test("Add bill to mock API POST", async () => {
+    test("Then number of fetched bills should be five", async () => {
       const postSpy = jest.spyOn(firebase, "post");
       const newBill = {
         id: "ECmaZAG4jkmdfECmaZAG",
@@ -155,4 +159,5 @@ describe("Given I am connected as an employee", () => {
       expect(message).toBeTruthy();
     });
   });
-})
+});
+
